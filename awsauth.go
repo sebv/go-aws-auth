@@ -38,6 +38,32 @@ func Sign(request *http.Request, credentials ...Credentials) *http.Request {
 }
 
 // Sign4 signs a request with Signed Signature Version 4.
+func Sign4WithSigner(request *http.Request, signer Signer) *http.Request {
+	keys := signer.Keys()
+
+	// Add the X-Amz-Security-Token header when using STS
+	if keys.SecurityToken != "" {
+		request.Header.Set("X-Amz-Security-Token", keys.SecurityToken)
+	}
+
+	prepareRequestV4(request)
+	meta := new(metadata)
+
+	// Task 1
+	hashedCanonReq := hashedCanonicalRequestV4(request, meta)
+
+	// Task 2
+	stringToSign := stringToSignV4(request, hashedCanonReq, meta)
+
+	// Task 3
+	signature := signer.SignatureV4(stringToSign, meta)
+
+	request.Header.Set("Authorization", buildAuthHeaderV4(signature, meta, keys))
+
+	return request
+}
+
+// Sign4 signs a request with Signed Signature Version 4.
 func Sign4(request *http.Request, credentials ...Credentials) *http.Request {
 	keys := chooseKeys(credentials)
 

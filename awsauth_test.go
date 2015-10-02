@@ -48,6 +48,21 @@ func TestIntegration(t *testing.T) {
 			}
 		})
 
+		Convey("A request to S3 with signer should succeed", func() {
+			request, _ := http.NewRequest("GET", "https://s3.amazonaws.com", nil)
+
+			if !credentialsSet() {
+				SkipSo(http.StatusOK, ShouldEqual, http.StatusOK)
+			} else {
+				response := sign4WithSignerAndDo(request)
+				if response.StatusCode != http.StatusOK {
+					message, _ := ioutil.ReadAll(response.Body)
+					t.Error(string(message))
+				}
+				So(response.StatusCode, ShouldEqual, http.StatusOK)
+			}
+		})
+
 		Convey("A request to EC2 should succeed", func() {
 			request := newRequest("GET", "https://ec2.amazonaws.com/?Version=2013-10-15&Action=DescribeInstances", nil)
 
@@ -270,6 +285,13 @@ func sign3AndDo(request *http.Request) *http.Response {
 
 func sign4AndDo(request *http.Request) *http.Response {
 	Sign4(request)
+	response, _ := client.Do(request)
+	return response
+}
+
+func sign4WithSignerAndDo(request *http.Request) *http.Response {
+	signer := NewSigner(newKeys())
+	Sign4WithSigner(request, signer)
 	response, _ := client.Do(request)
 	return response
 }
