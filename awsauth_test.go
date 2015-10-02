@@ -290,7 +290,7 @@ func sign4AndDo(request *http.Request) *http.Response {
 }
 
 func sign4WithSignerAndDo(request *http.Request) *http.Response {
-	signer := NewSigner(newKeys())
+	signer := NewSimpleSigner(newKeys())
 	Sign4WithSigner(request, signer)
 	response, _ := client.Do(request)
 	return response

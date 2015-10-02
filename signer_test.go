@@ -14,7 +14,7 @@ func TestSigner(t *testing.T) {
 	Convey("Given a Signer", t, func() {
 		var keys Credentials
 		keys = *testCredV4
-		signer := NewSigner(keys)
+		signer := NewSimpleSigner(keys)
 
 		Convey("It should not expose the secret access key", func() {
 			safeKeys := signer.Keys()
