@@ -56,7 +56,7 @@ func Sign4WithSigner(request *http.Request, signer Signer) *http.Request {
 	stringToSign := stringToSignV4(request, hashedCanonReq, meta)
 
 	// Task 3
-	signature := signer.SignatureV4(stringToSign, meta)
+	signature := signer.Sign4Signature(stringToSign, meta)
 
 	request.Header.Set("Authorization", buildAuthHeaderV4(signature, meta, keys))
 

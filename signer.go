@@ -2,7 +2,7 @@ package awsauth
 
 type Signer interface {
 	Keys() Credentials
-	SignatureV4(stringToSign string, meta *Metadata) string
+	Sign4Signature(stringToSign string, meta *Metadata) string
 }
 
 type signer struct {
@@ -24,7 +24,7 @@ func (s *signer) Keys() Credentials {
 	return *safeKeys
 }
 
-func (s *signer) SignatureV4(stringToSign string, meta *Metadata) string {
+func (s *signer) Sign4Signature(stringToSign string, meta *Metadata) string {
 	signingKey := signingKeyV4(s.keys.SecretAccessKey, meta.date, meta.region, meta.service)
 	return signatureV4(signingKey, stringToSign)
 }
