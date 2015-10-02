@@ -78,7 +78,7 @@ func TestVersion4SigningTasks(t *testing.T) {
 
 	Convey("Given a bogus request and credentials from AWS documentation with an additional meta tag", t, func() {
 		request := test_unsignedRequestV4(true, true)
-		meta := new(metadata)
+		meta := new(Metadata)
 
 		Convey("(Task 1) The canonical request should be built correctly", func() {
 			hashedCanonReq := hashedCanonicalRequestV4(request, meta)
@@ -115,7 +115,7 @@ func TestSignature4Helpers(t *testing.T) {
 	})
 
 	Convey("Authorization headers should be built properly", t, func() {
-		meta := &metadata{
+		meta := &Metadata{
 			algorithm:       "AWS4-HMAC-SHA256",
 			credentialScope: "20110909/us-east-1/iam/aws4_request",
 			signedHeaders:   "content-type;host;x-amz-date",

@@ -47,7 +47,7 @@ func Sign4WithSigner(request *http.Request, signer Signer) *http.Request {
 	}
 
 	prepareRequestV4(request)
-	meta := new(metadata)
+	meta := new(Metadata)
 
 	// Task 1
 	hashedCanonReq := hashedCanonicalRequestV4(request, meta)
@@ -73,7 +73,7 @@ func Sign4(request *http.Request, credentials ...Credentials) *http.Request {
 	}
 
 	prepareRequestV4(request)
-	meta := new(metadata)
+	meta := new(Metadata)
 
 	// Task 1
 	hashedCanonReq := hashedCanonicalRequestV4(request, meta)
@@ -198,7 +198,7 @@ func (this *Credentials) expired() bool {
 	}
 }
 
-type metadata struct {
+type Metadata struct {
 	algorithm       string
 	credentialScope string
 	signedHeaders   string

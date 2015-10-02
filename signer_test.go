@@ -22,7 +22,7 @@ func TestSigner(t *testing.T) {
 		})
 
 		Convey("It should sign a string using the V4 algorithm", func() {
-			meta := &metadata{
+			meta := &Metadata{
 				algorithm:       "AWS4-HMAC-SHA256",
 				credentialScope: "20110909/us-east-1/iam/aws4_request",
 				signedHeaders:   "content-type;host;x-amz-date",

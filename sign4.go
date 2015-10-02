@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func hashedCanonicalRequestV4(request *http.Request, meta *metadata) string {
+func hashedCanonicalRequestV4(request *http.Request, meta *Metadata) string {
 	// TASK 1. http://docs.aws.amazon.com/general/latest/gr/sigv4-create-canonical-request.html
 
 	payload := readAndReplaceBody(request)
@@ -41,7 +41,7 @@ func hashedCanonicalRequestV4(request *http.Request, meta *metadata) string {
 	return hashSHA256([]byte(canonicalRequest))
 }
 
-func stringToSignV4(request *http.Request, hashedCanonReq string, meta *metadata) string {
+func stringToSignV4(request *http.Request, hashedCanonReq string, meta *Metadata) string {
 	// TASK 2. http://docs.aws.amazon.com/general/latest/gr/sigv4-create-string-to-sign.html
 
 	requestTs := request.Header.Get("X-Amz-Date")
@@ -87,7 +87,7 @@ func signingKeyV4(secretKey, date, region, service string) []byte {
 	return kSigning
 }
 
-func buildAuthHeaderV4(signature string, meta *metadata, keys Credentials) string {
+func buildAuthHeaderV4(signature string, meta *Metadata, keys Credentials) string {
 	credential := keys.AccessKeyID + "/" + meta.credentialScope
 
 	return meta.algorithm +
