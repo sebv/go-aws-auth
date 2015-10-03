@@ -116,9 +116,9 @@ func TestSignature4Helpers(t *testing.T) {
 
 	Convey("Authorization headers should be built properly", t, func() {
 		meta := &Metadata{
-			algorithm:       "AWS4-HMAC-SHA256",
-			credentialScope: "20110909/us-east-1/iam/aws4_request",
-			signedHeaders:   "content-type;host;x-amz-date",
+			Algorithm:       "AWS4-HMAC-SHA256",
+			CredentialScope: "20110909/us-east-1/iam/aws4_request",
+			SignedHeaders:   "content-type;host;x-amz-date",
 		}
 		expected := expectingV4["AuthHeader"] + expectingV4["SignatureV4"]
 		actual := buildAuthHeaderV4(expectingV4["SignatureV4"], meta, keys)

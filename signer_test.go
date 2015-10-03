@@ -23,9 +23,9 @@ func TestSigner(t *testing.T) {
 
 		Convey("It should sign a string using the V4 algorithm", func() {
 			meta := &Metadata{
-				algorithm:       "AWS4-HMAC-SHA256",
-				credentialScope: "20110909/us-east-1/iam/aws4_request",
-				signedHeaders:   "content-type;host;x-amz-date",
+				Algorithm:       "AWS4-HMAC-SHA256",
+				CredentialScope: "20110909/us-east-1/iam/aws4_request",
+				SignedHeaders:   "content-type;host;x-amz-date",
 			}
 			signature := signer.Sign4Signature("aaa", meta)
 			So(signature, ShouldEqual, "866b425ab5ba7edbd48997150e88273762008b785969828a88e4d282f9233909")

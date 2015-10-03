@@ -82,7 +82,7 @@ func Sign4(request *http.Request, credentials ...Credentials) *http.Request {
 	stringToSign := stringToSignV4(request, hashedCanonReq, meta)
 
 	// Task 3
-	signingKey := signingKeyV4(keys.SecretAccessKey, meta.date, meta.region, meta.service)
+	signingKey := signingKeyV4(keys.SecretAccessKey, meta.Date, meta.Region, meta.Service)
 	signature := signatureV4(signingKey, stringToSign)
 
 	request.Header.Set("Authorization", buildAuthHeaderV4(signature, meta, keys))
@@ -199,12 +199,12 @@ func (this *Credentials) expired() bool {
 }
 
 type Metadata struct {
-	algorithm       string
-	credentialScope string
-	signedHeaders   string
-	date            string
-	region          string
-	service         string
+	Algorithm       string
+	CredentialScope string
+	SignedHeaders   string
+	Date            string
+	Region          string
+	Service         string
 }
 
 const (

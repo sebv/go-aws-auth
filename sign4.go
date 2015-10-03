@@ -35,8 +35,8 @@ func hashedCanonicalRequestV4(request *http.Request, meta *Metadata) string {
 		value := strings.TrimSpace(request.Header.Get(key))
 		headersToSign += key + ":" + value + "\n"
 	}
-	meta.signedHeaders = concat(";", sortedHeaderKeys...)
-	canonicalRequest := concat("\n", request.Method, normuri(request.URL.Path), normquery(request.URL.Query()), headersToSign, meta.signedHeaders, payloadHash)
+	meta.SignedHeaders = concat(";", sortedHeaderKeys...)
+	canonicalRequest := concat("\n", request.Method, normuri(request.URL.Path), normquery(request.URL.Query()), headersToSign, meta.SignedHeaders, payloadHash)
 
 	return hashSHA256([]byte(canonicalRequest))
 }
@@ -46,12 +46,12 @@ func stringToSignV4(request *http.Request, hashedCanonReq string, meta *Metadata
 
 	requestTs := request.Header.Get("X-Amz-Date")
 
-	meta.algorithm = "AWS4-HMAC-SHA256"
-	meta.service, meta.region = serviceAndRegion(request.Host)
-	meta.date = tsDateV4(requestTs)
-	meta.credentialScope = concat("/", meta.date, meta.region, meta.service, "aws4_request")
+	meta.Algorithm = "AWS4-HMAC-SHA256"
+	meta.Service, meta.Region = serviceAndRegion(request.Host)
+	meta.Date = tsDateV4(requestTs)
+	meta.CredentialScope = concat("/", meta.Date, meta.Region, meta.Service, "aws4_request")
 
-	return concat("\n", meta.algorithm, requestTs, meta.credentialScope, hashedCanonReq)
+	return concat("\n", meta.Algorithm, requestTs, meta.CredentialScope, hashedCanonReq)
 }
 
 func signatureV4(signingKey []byte, stringToSign string) string {
@@ -88,11 +88,11 @@ func signingKeyV4(secretKey, date, region, service string) []byte {
 }
 
 func buildAuthHeaderV4(signature string, meta *Metadata, keys Credentials) string {
-	credential := keys.AccessKeyID + "/" + meta.credentialScope
+	credential := keys.AccessKeyID + "/" + meta.CredentialScope
 
-	return meta.algorithm +
+	return meta.Algorithm +
 		" Credential=" + credential +
-		", SignedHeaders=" + meta.signedHeaders +
+		", SignedHeaders=" + meta.SignedHeaders +
 		", Signature=" + signature
 }
 

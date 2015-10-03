@@ -25,6 +25,6 @@ func (s *signer) Keys() Credentials {
 }
 
 func (s *signer) Sign4Signature(stringToSign string, meta *Metadata) string {
-	signingKey := signingKeyV4(s.keys.SecretAccessKey, meta.date, meta.region, meta.service)
+	signingKey := signingKeyV4(s.keys.SecretAccessKey, meta.Date, meta.Region, meta.Service)
 	return signatureV4(signingKey, stringToSign)
 }
